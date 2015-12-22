@@ -1,0 +1,217 @@
+{
+    "$schema": "http://schemas.microsoft.org/azure/deploymentTemplate?api-version=2015-01-01-preview#",
+    "contentVersion": "1.0",
+    "parameters": {
+        "accountName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Azure Automation account to deploy to."
+            }
+        },
+        "regionId": {
+            "type": "string",
+            "allowedValues": [
+                "Japan East",
+                "East US 2",
+                "West Europe",
+                "Southeast Asia",
+                "South Central US"
+            ],
+            "metadata": {
+                "description": "The region to deploy the Automation account in."
+            }
+        },
+        "pricingTier": {
+            "type": "string",
+            "allowedValues": [
+                "Free",
+                "Basic"
+            ],
+            "metadata": {
+                "description": "The pricing tier for the account."
+            }
+        }
+    },
+    "variables": {
+         "powerBImoduleName":"PowerBIPS",
+         "powerBIModuleUri": "",
+         "powerBIConnectionName": "AzureBillingPowerBIConnection",
+         "azureRateCardmoduleName": "AzureRateCard",
+         "azureRateCardModuleUri": "",
+         "azureRateCardConnectionName": "AzureRateCardConnection",
+         "runbookChild1" :"Get-AzureResourceUsageData",
+         "runbookChild1Uri" : "",
+         "runbookChild2" :"Get-AzureResourceCards",
+         "runbookChild2Uri" : "",
+         "runbookParent":"Add-AzureBillingPowerBI",
+         "runbookParentUri" : ""
+    },
+    "resources": [
+        {
+            "name": "[parameters('accountName')]",
+            "type": "Microsoft.Automation/automationAccounts",
+            "apiVersion": "2015-01-01-preview",
+            "location": "[parameters('regionId')]",
+            "dependsOn": [ ],
+            "tags": { },
+            "properties": {
+                "sku": {
+                    "name": "[parameters('pricingTier')]"
+                }
+            },
+            "resources": [
+                {
+                        "name": "[variables('PowerBIModuleName')]",
+                        "type": "modules",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+                        ],
+                        "tags": {
+                        },
+                        "properties": {
+                            "contentLink": {
+                                "uri": "[variables('PowerBIModuleUri')]"
+                            }
+                        }
+                },
+                {
+                        "name": "[variables('AzureRateCardModuleName')]",
+                        "type": "modules",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
+                        ],
+                        "tags": {
+                        },
+                        "properties": {
+                            "contentLink": {
+                                "uri": "[variables('AzureRateCardModuleUri')]"
+                            }
+                        }
+                },
+                {
+                    "name": "[variables('powerBIConnectionName')]",
+                    "type": "connections",
+                    "apiVersion": "2015-01-01-preview",
+                    "location": "[parameters('regionId')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
+                        "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]"
+                    ],
+                    "tags": {
+                    },
+                    "properties": {
+                        "name": "[variables('PowerBIConnectionName')]",
+                        "description": "Azure Billing PowerBI Connection",
+                        "isGlobal": false,
+                        "connectionType": {
+                            "name": "PowerBIPS"
+                        },
+                        "fieldDefinitionValues": {
+                        }
+                    }
+                },
+                {
+                    "name": "[variables('azureRateCardConnectionName')]",
+                    "type": "connections",
+                    "apiVersion": "2015-01-01-preview",
+                    "location": "[parameters('regionId')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
+                        "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]"
+                    ],
+                    "tags": {
+                    },
+                    "properties": {
+                        "name": "[parameters('AzureRateCardConnectionName')]",
+                        "description": "Azure Rate Card Connection",
+                        "isGlobal": false,
+                        "connectionType": {
+                            "name": "AzureRateCard"
+                        },
+                        "fieldDefinitionValues": {
+                        }
+                    }
+                },
+                {
+                        "name": "[variables('runbookChild1')]",
+                        "type": "runbooks",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]"
+                        ],
+                        "tags": {
+                            "key": "value"
+                        },
+                        "properties": {
+                            "runbookType": "Script",
+                            "logProgress": "false",
+                            "logVerbose": "false",
+                            "description": "This runbook retrieves the Azure usage data.",
+                            "publishContentLink": {
+                                "uri": "[variables('runbookChild1Uri')]",
+                                "version": "1.0.0.0"
+                            }
+                        }
+                    },
+                     {
+                        "name": "[variables('runbookChild2')]",
+                        "type": "runbooks",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]"
+                        ],
+                        "tags": {
+                            "key": "value"
+                        },
+                        "properties": {
+                            "runbookType": "Script",
+                            "logProgress": "false",
+                            "logVerbose": "false",
+                            "description": "This runbook retrieves the Azure Rate cards for all resources within the offer specified.",
+                            "publishContentLink": {
+                                "uri": "[variables('runbookChild2Uri')]",
+                                "version": "1.0.0.0"
+                            }
+                        }
+                    },
+                     {
+                        "name": "[variables('runbookParent')]",
+                        "type": "runbooks",
+                        "apiVersion": "2015-01-01-preview",
+                        "location": "[parameters('location')]",
+                        "dependsOn": [
+                            "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/runbooks', variables('runbookChild1'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/runbooks', variables('runbookChild2'))]"
+                        ],
+                        "tags": {
+                            "key": "value"
+                        },
+                        "properties": {
+                            "runbookType": "Script",
+                            "logProgress": "false",
+                            "logVerbose": "false",
+                            "description": "This runbook Calls out to Get-AzureResourceCards and AzureResourceUsagedata. The data retrieved is uploaded to PowerBI for further analysis",
+                            "publishContentLink": {
+                                "uri": "[variables('runbookParentUri')]",
+                                "version": "1.0.0.0"
+                            }
+                        }
+                    }
+            ]
+        }
+    ],
+    "outputs": { }
+}
