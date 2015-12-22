@@ -34,17 +34,17 @@
     },
     "variables": {
          "powerBImoduleName":"PowerBIPS",
-         "powerBIModuleUri": "",
+         "powerBIModuleUri": "https://devopsgallerystorage.blob.core.windows.net/azureautomationpackages/PowerBIPS%5C1.2.0.6%5CPowerBIPS.zip",
          "powerBIConnectionName": "AzureBillingPowerBIConnection",
          "azureRateCardmoduleName": "AzureRateCard",
-         "azureRateCardModuleUri": "",
+         "azureRateCardModuleUri": "https://github.com/Stijnc/AzureRateCard/archive/test.zip",
          "azureRateCardConnectionName": "AzureRateCardConnection",
          "runbookChild1" :"Get-AzureResourceUsageData",
-         "runbookChild1Uri" : "",
+         "runbookChild1Uri" : "https://raw.githubusercontent.com/Stijnc/AutomationPack---AzureBilling/master/Runbooks/Get-AzureResourceUsageData.ps1",
          "runbookChild2" :"Get-AzureResourceCards",
-         "runbookChild2Uri" : "",
+         "runbookChild2Uri" : "https://raw.githubusercontent.com/Stijnc/AutomationPack---AzureBilling/master/Runbooks/Get-AzureResourceCards.ps1",
          "runbookParent":"Add-AzureBillingPowerBI",
-         "runbookParentUri" : ""
+         "runbookParentUri" : "https://raw.githubusercontent.com/Stijnc/AutomationPack---AzureBilling/master/Runbooks/Add-AzureBillingPowerBI.ps1"
     },
     "resources": [
         {
