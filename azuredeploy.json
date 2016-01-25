@@ -37,7 +37,7 @@
          "powerBIModuleUri": "https://devopsgallerystorage.blob.core.windows.net/azureautomationpackages/PowerBIPS%5C1.2.0.6%5CPowerBIPS.zip",
          "powerBIConnectionName": "AzureBillingPowerBIConnection",
          "azureRateCardmoduleName": "AzureRateCard",
-         "azureRateCardModuleUri": "https://github.com/Stijnc/AzureRateCard/archive/test.zip",
+         "azureRateCardModuleUri": "https://github.com/Stijnc/AzureRateCard/releases/download/0.1.21.0/azureratecard.zip",
          "azureRateCardConnectionName": "AzureRateCardConnection",
          "runbookChild1" :"Get-AzureResourceUsageData",
          "runbookChild1Uri" : "https://raw.githubusercontent.com/Stijnc/AutomationPack---AzureBilling/master/Runbooks/Get-AzureResourceUsageData.ps1",
@@ -64,7 +64,7 @@
                         "name": "[variables('PowerBIModuleName')]",
                         "type": "modules",
                         "apiVersion": "2015-01-01-preview",
-                        "location": "[parameters('location')]",
+                        "location": "[parameters('RegionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
                         ],
@@ -80,7 +80,7 @@
                         "name": "[variables('AzureRateCardModuleName')]",
                         "type": "modules",
                         "apiVersion": "2015-01-01-preview",
-                        "location": "[parameters('location')]",
+                        "location": "[parameters('RegionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
                         ],
@@ -111,6 +111,7 @@
                             "name": "PowerBIPS"
                         },
                         "fieldDefinitionValues": {
+                            "username" : "[parameters('username')]"
                         }
                     }
                 },
@@ -140,7 +141,7 @@
                         "name": "[variables('runbookChild1')]",
                         "type": "runbooks",
                         "apiVersion": "2015-01-01-preview",
-                        "location": "[parameters('location')]",
+                        "location": "[parameters('regionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
                             "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
@@ -164,7 +165,7 @@
                         "name": "[variables('runbookChild2')]",
                         "type": "runbooks",
                         "apiVersion": "2015-01-01-preview",
-                        "location": "[parameters('location')]",
+                        "location": "[parameters('regionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
                             "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
@@ -188,7 +189,7 @@
                         "name": "[variables('runbookParent')]",
                         "type": "runbooks",
                         "apiVersion": "2015-01-01-preview",
-                        "location": "[parameters('location')]",
+                        "location": "[parameters('regionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
                             "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",

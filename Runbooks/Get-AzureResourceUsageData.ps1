@@ -1,16 +1,79 @@
-#Get-iAzureResourceUsageData
+<#PSScriptInfo
+
+.VERSION 0.1
+
+.GUID b66368a8-dc27-481a-b4f3-dff65a6d42ee
+
+.AUTHOR stijncallebaut
+
+.COMPANYNAME Inovativ
+
+.COPYRIGHT 
+
+.TAGS AzureAutomation OMS Azure Usagedata Utility
+
+.LICENSEURI http://choosealicense.com/licenses/mit/
+
+.PROJECTURI https://github.com/azureautomation/runbooks/blob/master/Utility/Connect-AzureVM.ps1
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+#>
+
+#Requires -Module AzureRm
+
+<# 
+
+.DESCRIPTION 
+
+#> 
+
+<#
+.SYNOPSIS 
+
+.DESCRIPTION
+    
+.PARAMETER AzureSubscriptionName
+    
+    
+.PARAMETER AzureOrgIdCredential
+    
+
+.PARAMETER ServiceName
+    
+
+.PARAMETER VMName    
+     
+
+.EXAMPLE
+    
+
+.NOTES
+    AUTHOR: Stijn Callebaut
+    LASTEDIT: Jan 6, 2016 
+#>
+
+#Get-iAzureResourceUsageDate
 
     param (
-	     $reportedStartTime = "2015-05-01"
-	    ,$reportedEndTime = ([datetime]::Today).toString('yyyy-MM-dd')
+	     $ReportedStartTime = "2015-05-01"
+	    ,$ReportedEndTime = ([datetime]::Today).toString('yyyy-MM-dd')
 	    ,[ValidateSet('Daily','Hourly')]
-	     $granularity = 'Daily'
-        ,$subscriptionId
-        ,$showDetails = $true
-        ,$credential
+	     $Granularity = 'Daily'
+        ,$SubscriptionId
+        ,$ShowDetails = $true
+        ,$Credential
     )
 
-    Add-AzureRmAccount -credential $credential
+    Add-AzureRmAccount -Credential $credential
 
     $ResourceData = @()
     $continuationToken = ""
@@ -37,14 +100,14 @@
                 Quantity, `
                 @{n='Project';e={$_.InfoFields.Project}}, `
                 InstanceData
-        if ($usageData.NextLink) {
-            $continuationToken = `
+        If ($usageData.NextLink) {
+            $ContinuationToken = `
                 [System.Web.HttpUtility]::`
                 UrlDecode($usageData.NextLink.Split("=")[-1])
         } 
-	    else {
-            $continuationToken = ""
+	    Else {
+            $ContinuationToken = ""
         }
-    } until (!$continuationToken)
+    } Until (!$ContinuationToken)
 
     $ResourceData

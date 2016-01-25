@@ -1,15 +1,77 @@
+<#PSScriptInfo
+
+.VERSION 0.1
+
+.GUID b66368a8-dc27-481a-b4f3-dff65a6d42ee
+
+.AUTHOR stijncallebaut
+
+.COMPANYNAME Inovativ
+
+.COPYRIGHT 
+
+.TAGS AzureAutomation OMS Azure Usagedata Utility
+
+.LICENSEURI http://choosealicense.com/licenses/mit/
+
+.PROJECTURI https://github.com/azureautomation/runbooks/blob/master/Utility/Connect-AzureVM.ps1
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+#>
+
+#Requires -Module AzureRm
+
+<# 
+
+.DESCRIPTION 
+
+#> 
+
+<#
+.SYNOPSIS 
+
+.DESCRIPTION
+    
+.PARAMETER AzureSubscriptionName
+    
+    
+.PARAMETER AzureOrgIdCredential
+    
+
+.PARAMETER ServiceName
+    
+
+.PARAMETER VMName    
+     
+
+.EXAMPLE
+    
+
+.NOTES
+    AUTHOR: Stijn Callebaut
+    LASTEDIT: Jan 6, 2016 
+#>
 #region setup
-$powerBIConnection = Get-AutomationConnection -Name 'AzureBillingPowerBIConnection'
+$PowerBIConnection = Get-AutomationConnection -Name 'AzureBillingPowerBIConnection'
 $AzureRateCardConnection = Get-AutomationConnection 'AzureRateCardConnection'
 $AzureRateCardCredential = [pscredential]::new($AzureRateCardConnection.userName,(ConvertTo-SecureString -String $AzureRateCardConnection.Password -AsPlainText -Force ))
 #$token		
-$authToken = Get-PBIAuthToken -Connection $powerBIConnection
+$AuthToken = Get-PBIAuthToken -Connection $powerBIConnection
 
-$dataSetSchema = Get-PBIDataSet -authToken $authToken -name "Azure billing" -Verbose
-if( -Not $dataSetSchema){
+$DataSetSchema = Get-PBIDataSet -AuthToken $AuthToken -Name "Azure billing" -Verbose
+If( -Not $DataSetSchema){
     
     #Create a new schema
-    $dataSetSchema = @{
+    $DataSetSchema = @{
          name = "Azure billing"
          tables = @(
             @{
@@ -45,20 +107,25 @@ if( -Not $dataSetSchema){
                     @{name='Currency'; dataType = 'String'}			
 		            )}
         )}
-	$dataSetSchema = New-PBIDataSet -authToken $authToken -dataSet $dataSetSchema -defaultRetentionPolicy "basicFIFO" -Verbose
+	$DataSetSchema = New-PBIDataSet -AuthToken $authToken -DataSet $dataSetSchema -DefaultRetentionPolicy "basicFIFO" -Verbose
 }
 
 #get the usage data
-$DataUsage = .\Get-AzureResourceUsageData.ps1 -credential $azureCredential
+$DataUsage = .\Get-AzureResourceUsageData.ps1 -Credential $AzureCredential
 
 #Get the pricelist
-$DataPrices = .\Get-AzureResourceCards.ps1 -Credential $AzureRateCardCredential -Offer $$AzureRateCardConnection.Offer -Currency $$AzureRateCardConnection.Currency -locale $$AzureRateCardConnection.Locale -regionInfo $$AzureRateCardConnection.RegionInfo -apiversion $$AzureRateCardConnection.ApiVersion
+$RateCardProperties = @{
+    Credential = $AzureRateCardCredential
+    Offer = $AzureRateCardConnection.Offer
+    Currency = $AzureRateCardConnection.Currency
+    Locale = $AzureRateCardConnection.Locale
+    RegionInfo = $AzureRateCardConnection.RegionInfo
+    ApiVersion = $AzureRateCardConnection.ApiVersion
+}
 
-#for demo we clear the data
-Clear-PBITableRows -authToken $authToken -dataSetId $dataSetSchema.Id -tableName 'ResourceConsumption' -Verbose
-Clear-PBITableRows -authToken $authToken -dataSetId $dataSetSchema.Id -tableName 'Pricelist' -Verbose
+$DataPrices = .\Get-AzureResourceCards.ps1 @RateCardProperties
 
-$DataUsage | Add-PBITableRows -authToken $authToken -dataSetId $dataSetSchema.id -tableName 'ResourceConsumption' -batchSize 1000 -Verbose
+$DataUsage | Add-PBITableRows -AuthToken $AuthToken -DataSetId $DataSetSchema.id -TableName 'ResourceConsumption' -BatchSize 1000 -Verbose
 
 
-$DataPrices | Add-PBITableRows -authToken $authToken -dataSetId $dataSetSchema.id -tableName 'Pricelist' -batchSize 1000 -Verbose
+$DataPrices | Add-PBITableRows -AuthToken $AuthToken -DataSetId $DataSetSchema.id -TableName 'Pricelist' -BatchSize 1000 -Verbose
