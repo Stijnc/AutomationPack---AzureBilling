@@ -133,6 +133,7 @@
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
                         ],
                         "tags": {
+                            "AutomationPack": "AzureBilling"
                         },
                         "properties": {
                             "contentLink": {
@@ -149,6 +150,7 @@
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]"
                         ],
                         "tags": {
+                            "AutomationPack": "AzureBilling"
                         },
                         "properties": {
                             "contentLink": {
@@ -166,6 +168,7 @@
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),'/modules/', variables('PowerBIModuleName'))]"
                     ],
                     "tags": {
+                        "AutomationPack": "AzureBilling"
                     },
                     "properties": {
                         "name": "[variables('powerBIConnectionName')]",
@@ -191,6 +194,7 @@
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),'/modules/', variables('azureRateCardmoduleName'))]"
                     ],
                     "tags": {
+                        "AutomationPack": "AzureBilling"
                     },
                     "properties": {
                         "name": "[parameters('AzureRateCardConnectionName')]",
@@ -220,7 +224,7 @@
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),'/modules/', variables('azureRateCardmoduleName'))]"
                         ],
                         "tags": {
-                            "key": "value"
+                            "AutomationPack": "AzureBilling"
                         },
                         "properties": {
                             "runbookType": "Script",
@@ -244,7 +248,7 @@
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),'/modules/', variables('azureRateCardmoduleName'))]"
                         ],
                         "tags": {
-                            "key": "value"
+                            "AutomationPack": "AzureBilling"
                         },
                         "properties": {
                             "runbookType": "Script",
@@ -269,8 +273,8 @@
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),'/runbooks/', variables('runbookChild1'))]",
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'),'/runbooks/', variables('runbookChild2'))]"
                         ],
-                        "tags": {
-                            "key": "value"
+                       "tags": {
+                            "AutomationPack": "AzureBilling"
                         },
                         "properties": {
                             "runbookType": "Script",
