@@ -99,7 +99,7 @@
                     "location": "[parameters('regionId')]",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
-                        "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]"
+                        "[concat('Microsoft.Automation/automationAccounts/modules/', variables('PowerBIModuleName'))]"
                     ],
                     "tags": {
                     },
@@ -122,7 +122,7 @@
                     "location": "[parameters('regionId')]",
                     "dependsOn": [
                         "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
-                        "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]"
+                        "[concat('Microsoft.Automation/automationAccounts/modules/', variables('azureRateCardConnectionName'))]"
                     ],
                     "tags": {
                     },
@@ -144,8 +144,8 @@
                         "location": "[parameters('regionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]"
+                            "[concat('Microsoft.Automation/automationAccounts/modules/', variables('PowerBIModuleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules/', variables('azureRateCardmoduleName'))]"
                         ],
                         "tags": {
                             "key": "value"
@@ -168,8 +168,8 @@
                         "location": "[parameters('regionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]"
+                            "[concat('Microsoft.Automation/automationAccounts/modules/', variables('PowerBIModuleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules/', variables('azureRateCardmoduleName'))]"
                         ],
                         "tags": {
                             "key": "value"
@@ -192,10 +192,10 @@
                         "location": "[parameters('regionId')]",
                         "dependsOn": [
                             "[concat('Microsoft.Automation/automationAccounts/', parameters('accountName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('PowerBIModuleName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/modules', variables('azureRateCardConnectionName'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/runbooks', variables('runbookChild1'))]",
-                            "[concat('Microsoft.Automation/automationAccounts/runbooks', variables('runbookChild2'))]"
+                            "[concat('Microsoft.Automation/automationAccounts/modules/', variables('PowerBIModuleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/modules/', variables('azureRateCardmoduleName'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/runbooks/', variables('runbookChild1'))]",
+                            "[concat('Microsoft.Automation/automationAccounts/runbooks/', variables('runbookChild2'))]"
                         ],
                         "tags": {
                             "key": "value"
