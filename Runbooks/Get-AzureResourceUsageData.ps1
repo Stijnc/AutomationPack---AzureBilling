@@ -66,7 +66,7 @@
     param (
 	     $ReportedStartTime = "2015-05-01"
 	    ,$ReportedEndTime = ([datetime]::Today).toString('yyyy-MM-dd')
-	    ,#[ValidateSet('Daily','Hourly')]
+	    ,[ValidateSet('Daily','Hourly')]
 	     $Granularity = 'Daily'
         ,$SubscriptionId
         ,$ShowDetails = $true

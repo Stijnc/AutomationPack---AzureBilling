@@ -227,7 +227,7 @@
                             "AutomationPack": "AzureBilling"
                         },
                         "properties": {
-                            "runbookType": "Script",
+                            "runbookType": "PowerShell",
                             "logProgress": "false",
                             "logVerbose": "false",
                             "description": "This runbook retrieves the Azure usage data.",
@@ -251,7 +251,7 @@
                             "AutomationPack": "AzureBilling"
                         },
                         "properties": {
-                            "runbookType": "Script",
+                            "runbookType": "PowerShell",
                             "logProgress": "false",
                             "logVerbose": "false",
                             "description": "This runbook retrieves the Azure Rate cards for all resources within the offer specified.",
@@ -277,7 +277,7 @@
                             "AutomationPack": "AzureBilling"
                         },
                         "properties": {
-                            "runbookType": "Script",
+                            "runbookType": "PowerShell",
                             "logProgress": "false",
                             "logVerbose": "false",
                             "description": "This runbook Calls out to Get-AzureResourceCards and AzureResourceUsagedata. The data retrieved is uploaded to PowerBI for further analysis",
