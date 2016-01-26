@@ -175,7 +175,7 @@
                         "description": "Azure Billing PowerBI Connection",
                         "isGlobal": false,
                         "connectionType": {
-                            "name": "PowerBIPS"
+                            "name": "PowerBI"
                         },
                         "fieldDefinitionValues": {
                             "UserName" : "[parameters('PowerBIUserName')]",
@@ -197,7 +197,7 @@
                         "AutomationPack": "AzureBilling"
                     },
                     "properties": {
-                        "name": "[parameters('AzureRateCardConnectionName')]",
+                        "name": "[variables('AzureRateCardConnectionName')]",
                         "description": "Azure Rate Card Connection",
                         "isGlobal": false,
                         "connectionType": {
