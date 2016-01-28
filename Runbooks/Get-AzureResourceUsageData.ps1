@@ -64,10 +64,10 @@
 #Get-iAzureResourceUsageDate
 
     param (
-	     $ReportedStartTime = "2015-05-01"
-	    ,$ReportedEndTime = ([datetime]::Today).toString('yyyy-MM-dd')
-	    ,[ValidateSet('Daily','Hourly')]
-	     $Granularity = 'Daily'
+         $ReportedStartTime = "2015-05-01"
+        ,$ReportedEndTime = ([datetime]::Today).toString('yyyy-MM-dd')
+        ,[ValidateSet('Daily','Hourly')]
+         $Granularity = 'Daily'
         ,$SubscriptionId
         ,$ShowDetails = $true
         ,$Credential
@@ -105,7 +105,7 @@
                 [System.Web.HttpUtility]::`
                 UrlDecode($usageData.NextLink.Split("=")[-1])
         } 
-	    Else {
+        Else {
             $ContinuationToken = ""
         }
     } Until (!$ContinuationToken)

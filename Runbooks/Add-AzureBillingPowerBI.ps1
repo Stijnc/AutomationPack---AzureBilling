@@ -65,7 +65,7 @@
 $PowerBIConnection = Get-AutomationConnection -Name 'AzureBillingPowerBIConnection'
 $AzureRateCardConnection = Get-AutomationConnection 'AzureRateCardConnection'
 $AzureRateCardCredential = [pscredential]::new($AzureRateCardConnection.userName,(ConvertTo-SecureString -String $AzureRateCardConnection.Password -AsPlainText -Force ))
-#$token		
+#$token        
 $AuthToken = Get-PBIAuthToken -Connection $powerBIConnection
 write-output 'test'
 $DataSetSchema = Get-PBIDataSet -AuthToken $AuthToken -Name "Azure billing" -Verbose
@@ -77,10 +77,10 @@ If( -Not $DataSetSchema){
          tables = @(
             @{
              name = "ResourceConsumption"
-	         columns = @( 
+             columns = @( 
                     @{name = "UsageStartTime"; dataType = "DateTime"  }
-		            @{name = "UsageEndTime"; dataType = "DateTime"  }
-		            @{name='SubscriptionId'; dataType = 'String'},
+                    @{name = "UsageEndTime"; dataType = "DateTime"  }
+                    @{name='SubscriptionId'; dataType = 'String'},
                     @{name='MeterCategory'; dataType = 'String'}
                     @{name='MeterId'; dataType = 'String'},
                     @{name='MeterName'; dataType = 'String'},
@@ -90,12 +90,12 @@ If( -Not $DataSetSchema){
                     @{name='Quantity'; dataType = 'String'},
                     @{name='Project'; dataType = 'String'},
                     @{name='InstanceData'; dataType = 'String'}
-		            )}
-		    , 
-		    @{
+                    )}
+            , 
+            @{
              name = "Pricelist"
-	         columns = @( 
-		            @{name='MeterId'; dataType='String'},
+             columns = @( 
+                    @{name='MeterId'; dataType='String'},
                     @{name='MeterName'; dataType = 'String'},
                     @{name='MeterCategory'; dataType = 'String'},
                     @{name='MeterSubCategory'; dataType = 'String'}
@@ -105,10 +105,10 @@ If( -Not $DataSetSchema){
                     @{name='MeterRates'; dataType = 'String'},
                     @{name='EffectiveDate'; dataType = 'DateTime'},
                     @{name='IncludedQuantity'; dataType = 'String'},
-                    @{name='Currency'; dataType = 'String'}			
-		            )}
+                    @{name='Currency'; dataType = 'String'}            
+                    )}
         )}
-	$DataSetSchema = New-PBIDataSet -AuthToken $authToken -DataSet $dataSetSchema -DefaultRetentionPolicy "basicFIFO" -Verbose
+    $DataSetSchema = New-PBIDataSet -AuthToken $authToken -DataSet $dataSetSchema -DefaultRetentionPolicy "basicFIFO" -Verbose
 }
 
 #get the usage data
