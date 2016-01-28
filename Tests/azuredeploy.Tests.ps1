@@ -35,8 +35,8 @@ Describe 'Json file: $azuredeploy' {
         $SchemaUri = '{0}{1}#' -f 'http://schemas.microsoft.org/azure/deploymentTemplate?api-version=', $SchemaVersion
         
          $jsser = [System.Web.Script.Serialization.JavaScriptSerializer]::new()
-            $jsser.MaxJsonLength = $jsser.MaxJsonLength * 10
-            $jsser.RecursionLimit = 99
+         $jsser.MaxJsonLength = $jsser.MaxJsonLength * 10
+         $jsser.RecursionLimit = 99
         
         $script:json = $null
     }
@@ -58,20 +58,16 @@ Describe 'Json file: $azuredeploy' {
            $script:json =  $jsser.DeserializeObject((Get-Content $azuredeploy -Raw))
        }
         
-       It 'should include a schema' {
-       
-           $script:json.Keys -ccontains '$schema'| Should Be $true
-           
+       It 'should include a schema' {  
+           $script:json.Keys -ccontains '$schema'| Should Be $true     
        }
               
         It "should have a value of $SchemaUri" {
-             $script:json['$schema'] | out-file test.txt -Append
             $script:json['$schema'] -eq $SchemaUri | Should be $true
         }
         
-        It 'should include properties' {
-            $script:json.Keys -ccontains 'parameters' | Should Be $true
-            
+        It 'should include parameters' {
+            $script:json.Keys -ccontains 'parameters' | Should Be $true      
         }
         
         It 'should include variables' {
@@ -86,26 +82,43 @@ Describe 'Json file: $azuredeploy' {
             $script:json.Keys -ccontains 'outputs' | Should Be $true
         }
         
-        foreach ($Parameter in $script:json['parameters']) {
-            
-           foreach ($Item in $Parameter.Values) {
-               
-               It "parameter $($Parameter.Name) contains metadata" {
-                   $item.Keys -ccontains 'metadata' | Should Be $true
+        foreach ($Parameter in $script:json['parameters'].GetEnumerator()) {
+           foreach ($Item in $Parameter) {
+               $Item.Key
+               It "parameter $($item.Key) contains metadata" {
+                   ($item.value).Keys -ccontains 'metadata' | Should Be $true
                }
-           }
-            
+           } 
         }
         
         AfterAll {
-            $script:json = $null
-            
+            $script:json = $null         
         }
     }
     Context 'Deployment' {
         
+        BeforeAll {
+            
+            $Resourcegroup = Get-AzureRmResourceGroup -Name 'RGAutomationPack'
+            if(!$Resourcegroup){
+                
+                [void](New-AzureRmResourceGroup -Name 'RGAutomationPack' -Location 'West Europe')
+            }
+            
+            $script:ARMParamObject = @{
+                accountName = 'AAAzureBilling01'
+                RegionId = 'West Europe'
+                pricingTier = 'Free'
+            }
+        }
+        
         It 'should deploy' {
-            #Test-AzureRmResourceGroupDeployment    
+          Test-AzureRmResourceGroupDeployment -TemplateFile $azuredeploy -TemplateParameterObject $script:ARMParamObject -ResourceGroupName $ResourceGroup | Should not Throw
+        }
+        
+        AfterAll {
+            
+            Remove-AzureRmResourceGroup -Name 'RGAutomationPackIt is ' -Force
         }
     }
 }
