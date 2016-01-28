@@ -1,0 +1,50 @@
+#---------------------------------#
+#      environment configuration  #
+#---------------------------------#
+os: WMF 5
+version: 0.1.{build}.0
+skip_commits:
+    message: /updated readme.*
+install:
+  - cinst -y pester
+  - git clone https://github.com/Stijnc/ARM.Tests
+  - ps: Get-PackageProvider -Name NuGet -Force
+  
+environment:
+  APIKEY:
+    secure: z3no1lElCb0WtrRxtEZUqz2uBlbRkanI4uSaGnk7PSj/zGe1Te1FCmEIvhyr5o0J
+
+#---------------------------------#
+#      build configuration        #
+#---------------------------------#
+
+build: false
+
+#---------------------------------#
+#      test configuration         #
+#---------------------------------#
+
+test_script:
+  - ps: |
+      $testResultsFile = ".\TestsResults.xml"
+      $res = Invoke-Pester -OutputFormat NUnitXml -OutputFile $testResultsFile -PassThru
+      (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $testResultsFile))
+      if ($res.FailedCount -gt 0) {
+        throw "$($res.FailedCount) tests failed."
+      }
+#---------------------------------#
+#      deployment configuration   #
+#---------------------------------#
+
+# scripts to run before deployment
+
+
+#---------------------------------#
+#      after build                #
+#---------------------------------#
+
+on_finish:
+- ps: #$blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+on_success:
+  - ps: #Publish-Module -NuGetAPIKey $env:APIKEY -Path $pwd
