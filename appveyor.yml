@@ -7,7 +7,12 @@ skip_commits:
     message: /updated readme.*
 install:
   - cinst -y pester
-  - git clone https://github.com/Stijnc/ARM.Tests
+  - git clone https://github.com/Stijnc/ARM.Tests #azuredeploy tests
+  - git clone https://github.com/Stijnc/PowerShell.Tests #basic powershell tests
+  - ps: Push-Location
+  - cd PowerShell.Tests
+  - ps: Import-Module .\TestHelper.psm1 -force #Contains the new-nuspec function
+  - ps: Pop-Location  
   - ps: Get-PackageProvider -Name NuGet -Force
   
 environment:
