@@ -1,11 +1,11 @@
 {
-	"version": "0.3.1",
-	"configurations": [
+    "version": "0.3.1",
+    "configurations": [
 		{
-			"name": "PowerShell",
-			"type": "PowerShell",
-			"request": "launch",
-			"program": "${file}"
+            "name": "PowerShell",
+            "type": "PowerShell",
+            "request": "launch",
+            "program": "${file}"
 		}
-	]
+    ]
 }

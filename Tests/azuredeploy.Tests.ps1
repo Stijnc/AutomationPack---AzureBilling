@@ -37,6 +37,5 @@ $azuredeploy = ".\azuredeploy.json"
             Remove-AzureRmResourceGroup -Name 'RGAutomationPackIt is ' -Force
         }
     }
-}
 
 
