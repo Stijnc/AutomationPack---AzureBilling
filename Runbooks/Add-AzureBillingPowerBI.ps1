@@ -61,12 +61,13 @@
     LASTEDIT: Jan 6, 2016 
 #>
 #region setup
+'test'
 $PowerBIConnection = Get-AutomationConnection -Name 'AzureBillingPowerBIConnection'
 $AzureRateCardConnection = Get-AutomationConnection 'AzureRateCardConnection'
 $AzureRateCardCredential = [pscredential]::new($AzureRateCardConnection.userName,(ConvertTo-SecureString -String $AzureRateCardConnection.Password -AsPlainText -Force ))
 #$token		
 $AuthToken = Get-PBIAuthToken -Connection $powerBIConnection
-
+write-output 'test'
 $DataSetSchema = Get-PBIDataSet -AuthToken $AuthToken -Name "Azure billing" -Verbose
 If( -Not $DataSetSchema){
     
