@@ -1,20 +1,21 @@
+
 <#PSScriptInfo
 
-.VERSION 0.1
+.VERSION 1.0
 
-.GUID b66368a8-dc27-481a-b4f3-dff65a6d42ee
+.GUID 1bc7a10a-bb16-4b37-85d6-90cc7f5ee310
 
-.AUTHOR stijncallebaut
+.AUTHOR StijnCallebaut
 
-.COMPANYNAME Inovativ
+.COMPANYNAME 
 
 .COPYRIGHT 
 
-.TAGS AzureAutomation OMS Azure Usagedata Utility
+.TAGS 
 
-.LICENSEURI http://choosealicense.com/licenses/mit/
+.LICENSEURI 
 
-.PROJECTURI https://github.com/azureautomation/runbooks/blob/master/Utility/Connect-AzureVM.ps1
+.PROJECTURI 
 
 .ICONURI 
 
@@ -26,13 +27,13 @@
 
 .RELEASENOTES
 
-#>
 
-#Requires -Module AzureRm
+#>
 
 <# 
 
 .DESCRIPTION 
+ description 
 
 #> 
 

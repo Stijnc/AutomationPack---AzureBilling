@@ -11,6 +11,7 @@ We should validate that:
 
 $azuredeploy = ".\azuredeploy.json"
 
+Describe {
     Context 'Deployment' {
         
         BeforeAll {
@@ -38,4 +39,4 @@ $azuredeploy = ".\azuredeploy.json"
         }
     }
 
-
+}
